@@ -12,13 +12,15 @@ const main = async () => {
   try {
     console.log("Seeding database");
 
-    await db.delete(schema.courses);
-    await db.delete(schema.userProgress);
-    await db.delete(schema.units);
-    await db.delete(schema.lessons);
-    await db.delete(schema.challenges);
-    await db.delete(schema.challengeOptions);
-    await db.delete(schema.challengeProgress);
+    await Promise.all([
+      db.delete(schema.courses),
+      db.delete(schema.userProgress),
+      db.delete(schema.units),
+      db.delete(schema.lessons),
+      db.delete(schema.challenges),
+      db.delete(schema.challengeOptions),
+      db.delete(schema.challengeProgress),
+    ]);
 
     await db.insert(schema.courses).values([
       {
@@ -94,6 +96,20 @@ const main = async () => {
         order: 1,
         question: "Which one of these is the 'the man'?",
       },
+      {
+        id: 2,
+        lessonId: 1, // Nouns,
+        type: "ASSIST",
+        order: 2,
+        question: "'the man'",
+      },
+      {
+        id: 3,
+        lessonId: 1, // Nouns,
+        type: "SELECT",
+        order: 3,
+        question: "Which one of these is the 'the robot'?",
+      },
     ]);
 
     await db.insert(schema.challengeOptions).values([
@@ -117,6 +133,51 @@ const main = async () => {
         id: 3,
         challengeId: 1, // "Which one of these is the 'the man'?"
         correct: false,
+        text: "el robot",
+        imageSrc: "/robot.svg",
+        audioSrc: "/es_robot.mp3",
+      },
+    ]);
+
+    await db.insert(schema.challengeOptions).values([
+      {
+        challengeId: 2, // "the man"?
+        correct: true,
+        text: "el hombre",
+        audioSrc: "/es_man.mp3",
+      },
+      {
+        challengeId: 2, // "the man"?
+        correct: false,
+        text: "la mujer",
+        audioSrc: "/es_woman.mp3",
+      },
+      {
+        challengeId: 2, // "the man"?
+        correct: false,
+        text: "el robot",
+        audioSrc: "/es_robot.mp3",
+      },
+    ]);
+
+    await db.insert(schema.challengeOptions).values([
+      {
+        challengeId: 3, // "Which one of these is the 'the robot'?"
+        correct: false,
+        text: "el hombre",
+        imageSrc: "/man.svg",
+        audioSrc: "/es_man.mp3",
+      },
+      {
+        challengeId: 3, // "Which one of these is the 'the robot'?"
+        correct: false,
+        text: "la mujer",
+        imageSrc: "/woman.svg",
+        audioSrc: "/es_woman.mp3",
+      },
+      {
+        challengeId: 3, // "Which one of these is the 'the robot'?"
+        correct: true,
         text: "el robot",
         imageSrc: "/robot.svg",
         audioSrc: "/es_robot.mp3",
