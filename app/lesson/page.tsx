@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
-import { getLesson, getUserProgress } from "@/db/queries";
+import { getLesson, getUserProgress } from '@/db/queries';
 
-import { Quiz } from "./quiz";
+import { Quiz } from './quiz';
 
 const LessonPage = async () => {
   const lessonData = getLesson();
@@ -14,13 +14,11 @@ const LessonPage = async () => {
   ]);
 
   if (!lesson || !userProgress) {
-    redirect("/learn");
+    redirect('/learn');
   }
 
   const initialPercentage =
-    (lesson.challenges.filter(
-      (challenge) => challenge.completed
-    ).length /
+    (lesson.challenges.filter((challenge) => challenge.completed).length /
       lesson.challenges.length) *
     100;
 

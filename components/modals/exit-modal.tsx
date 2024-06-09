@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { useExitModal } from "@/store/use-exit-modal";
+import { useExitModal } from '@/store/use-exit-modal';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +12,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export const ExitModal = () => {
   const router = useRouter();
@@ -31,19 +31,13 @@ export const ExitModal = () => {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="w-full flex items-center justify-center mb-5">
-            <Image
-              src="/mascot_sad.svg"
-              alt="Mascot"
-              height={80}
-              width={80}
-            />
+            <Image src="/mascot_sad.svg" alt="Mascot" height={80} width={80} />
           </div>
           <DialogTitle className="text-center font-bold text-2xl">
             Wait, don&apos;t go!
           </DialogTitle>
           <DialogDescription className="text-center text-base">
-            You&apos;re about to leave the lesson. Are you
-            sure?
+            You&apos;re about to leave the lesson. Are you sure?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mb-4">
@@ -62,7 +56,7 @@ export const ExitModal = () => {
               size="lg"
               onClick={() => {
                 close();
-                router.push("/learn");
+                router.push('/learn');
               }}
             >
               End session
