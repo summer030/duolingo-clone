@@ -1,31 +1,25 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from 'next/cache';
+import { auth } from '@clerk/nextjs/server';
 
-import db from "@/db/dizzle";
-import { and, eq } from "drizzle-orm";
-import { getUserProgress } from "@/db/queries";
-import {
-  challengeProgress,
-  challenges,
-  userProgress,
-} from "@/db/schema";
+import db from '@/db/dizzle';
+import { and, eq } from 'drizzle-orm';
+import { getUserProgress } from '@/db/queries';
+import { challengeProgress, challenges, userProgress } from '@/db/schema';
 
-export const upsertChallengeProgress = async (
-  challengeId: number
-) => {
+export const upsertChallengeProgress = async (challengeId: number) => {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
 
   const currentUserProgress = await getUserProgress();
   // TODO: Handle subscription query later
 
   if (!currentUserProgress) {
-    throw new Error("User progress not found");
+    throw new Error('User progress not found');
   }
 
   const challenge = await db.query.challenges.findFirst({
@@ -33,24 +27,23 @@ export const upsertChallengeProgress = async (
   });
 
   if (!challenge) {
-    throw new Error("Challenge not fount");
+    throw new Error('Challenge not fount');
   }
 
   const lessonId = challenge.lessonId;
 
-  const existingChallengeProgress =
-    await db.query.challengeProgress.findFirst({
-      where: and(
-        eq(challengeProgress.userId, userId),
-        eq(challengeProgress.challengeId, challengeId)
-      ),
-    });
+  const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+    where: and(
+      eq(challengeProgress.userId, userId),
+      eq(challengeProgress.challengeId, challengeId)
+    ),
+  });
 
   const isPractice = !!existingChallengeProgress;
 
   // TODO: Not if user has a subscription
   if (currentUserProgress.hearts === 0 && !isPractice) {
-    return { error: "hearts" };
+    return { error: 'hearts' };
   }
 
   if (isPractice) {
@@ -59,12 +52,7 @@ export const upsertChallengeProgress = async (
       .set({
         completed: true,
       })
-      .where(
-        eq(
-          challengeProgress.id,
-          existingChallengeProgress.id
-        )
-      );
+      .where(eq(challengeProgress.id, existingChallengeProgress.id));
 
     await db
       .update(userProgress)
@@ -73,10 +61,10 @@ export const upsertChallengeProgress = async (
         points: currentUserProgress.points + 10,
       })
       .where(eq(userProgress.userId, userId));
-    revalidatePath("/learn");
-    revalidatePath("/lesson");
-    revalidatePath("/quests");
-    revalidatePath("/leaderboard");
+    revalidatePath('/learn');
+    revalidatePath('/lesson');
+    revalidatePath('/quests');
+    revalidatePath('/leaderboard');
     revalidatePath(`/lesson/${lessonId}`);
     return;
   }
@@ -94,9 +82,9 @@ export const upsertChallengeProgress = async (
     })
     .where(eq(userProgress.userId, userId));
 
-  revalidatePath("/learn");
-  revalidatePath("/lesson");
-  revalidatePath("/quests");
-  revalidatePath("/leaderboard");
+  revalidatePath('/learn');
+  revalidatePath('/lesson');
+  revalidatePath('/quests');
+  revalidatePath('/leaderboard');
   revalidatePath(`/lesson/${lessonId}`);
 };

@@ -1,18 +1,18 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
 import {
   getCourseProgress,
   getLessonPercentage,
   getUnits,
   getUserProgress,
-} from "@/db/queries";
+} from '@/db/queries';
 
-import { Unit } from "./unit";
-import { Header } from "./header";
+import { Unit } from './unit';
+import { Header } from './header';
 
-import { FeedWrapper } from "@/components/feed-wrapper";
-import { StickyWrapper } from "@/components/sticky-wrapper";
-import { UserProgress } from "@/components/user-progress";
+import { FeedWrapper } from '@/components/feed-wrapper';
+import { StickyWrapper } from '@/components/sticky-wrapper';
+import { UserProgress } from '@/components/user-progress';
 
 const LearnPage = async () => {
   const unitsData = getUnits();
@@ -20,24 +20,20 @@ const LearnPage = async () => {
   const courseProgressData = getCourseProgress();
   const lessonPercentageData = getLessonPercentage();
 
-  const [
-    userProgress,
-    units,
-    courseProgress,
-    lessonPercentage,
-  ] = await Promise.all([
-    userProgressData,
-    unitsData,
-    courseProgressData,
-    lessonPercentageData,
-  ]);
+  const [userProgress, units, courseProgress, lessonPercentage] =
+    await Promise.all([
+      userProgressData,
+      unitsData,
+      courseProgressData,
+      lessonPercentageData,
+    ]);
 
   if (!userProgress || !userProgress.activeCourse) {
-    redirect("/courses");
+    redirect('/courses');
   }
 
   if (!courseProgress) {
-    redirect("/courses");
+    redirect('/courses');
   }
   return (
     <div className="flex flex-row-reverse gap-[48px] px-6">

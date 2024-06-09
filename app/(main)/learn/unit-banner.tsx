@@ -1,16 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { NotebookText } from "lucide-react";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { NotebookText } from 'lucide-react';
+import Link from 'next/link';
 
 type Props = {
   title: string;
   description: string;
 };
 
-export const UnitBanner = ({
-  title,
-  description,
-}: Props) => {
+export const UnitBanner = ({ title, description }: Props) => {
   return (
     <div className="w-full rounded-xl bg-lime-500 p-5 text-white flex items-center justify-between">
       <div className="space-y-2.5">
